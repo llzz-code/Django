@@ -1,3 +1,7 @@
+```shell script
+pip install django==2.0.1
+```
+
 ```
 helloDjango
     |--- helloDjango    主工程目录
