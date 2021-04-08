@@ -14,7 +14,7 @@ class CateTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'order_num')
 
 class FruitAdmin(admin.ModelAdmin):
-    list_display = ('name', 'source', 'price', 'category', 'summary')
+    list_display = ('name', 'source', 'price', 'category', 'summary', 'store_name', 'img')
 
 
 class StoreAdmin(admin.ModelAdmin):

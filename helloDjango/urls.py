@@ -40,6 +40,7 @@ urlpatterns = [
     path('index', index),
     # include()导入app模块下urls中声明的所有子路由
     path('user/', include('mainapp.user.urls')),
+    path('fruit/', include('mainapp.fruit.urls')),
     path('', fruit_list)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # path('fruit/', include('mainapp.fruit.urls')),

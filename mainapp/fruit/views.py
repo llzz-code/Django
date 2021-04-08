@@ -1,5 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
+from django.db.models import Avg, Count, Max, Min, Sum
 from mainapp.models import FruitEntity, CateTypeEntity, StoreEntity
 
 
@@ -20,6 +21,25 @@ def fruit_list(request):
     return render(request, 'fruit/list.html', locals())
 
 def store(request):
-    stores = StoreEntity.objects.all()
+    # 返回queryset对象的方法有
+    # filter() exclude()  all()
+    queryset = StoreEntity.objects.filter(crate_time__year__let=2002)
+    first_store = queryset.first()    # 第一个对象
 
+    # 如果是API接口，返回Json数据，可以用queryset.values()  返回QuerySet对象，对象迭代为字典  QuerySet<{}, {}>
+
+    stores = queryset.all()
     return render(request, 'fruit/list.html', locals())
+
+    # return JsonResponse(dict)   返回json响应
+
+
+def count_fruit(request):
+    # 返回json数据：统计每种分类的水果数量、最高价格、最低价格
+    result = FruitEntity.objects.aggregate(cnt=Count('name'),
+                                           max=Max('price'),
+                                           min=Min('price'),
+                                           avg=Avg('price'),
+                                           sum=Sum('price'))
+
+    return JsonResponse(result)
