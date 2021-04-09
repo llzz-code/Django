@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.db.models import Avg, Count, Max, Min, Sum
+from django.db.models import Avg, Count, Max, Min, Sum, F, Q
 from mainapp.models import FruitEntity, CateTypeEntity, StoreEntity
 
 
@@ -41,5 +41,15 @@ def count_fruit(request):
                                            min=Min('price'),
                                            avg=Avg('price'),
                                            sum=Sum('price'))
+    # 全场水果打8.8折
+    # FruitEntity.objects.update(price=F('price')*0.88)
+    fruits = FruitEntity.objects.values()
 
-    return JsonResponse(result)
+    # Q操作 与& 或| 非~
+    # 查询价格低于50的或大于100的
+    fruits2 = FruitEntity.objects.filter(Q(price__lte=1) | Q(price__gte=100)).values()
+
+    return JsonResponse({
+        'count': result,
+        'fruits': [fruit for fruit in fruits]
+    })

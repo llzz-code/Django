@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mainapp.models import UserEntity, FruitEntity, CateTypeEntity, StoreEntity
+from mainapp.models import UserEntity, FruitEntity, CateTypeEntity, StoreEntity, RealProfile
 
 
 # Register your models here.
@@ -9,6 +9,9 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 12    # 每页数据个数
     list_filter = ('id', 'phone')    # 过滤器(分类使用)
     search_fields = ('id', 'phone', 'name')    # 搜索
+
+class RealProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'real_name', 'number', 'real_type')
 
 class CateTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'order_num')
@@ -26,4 +29,5 @@ admin.site.register(UserEntity, UserAdmin)
 admin.site.register(CateTypeEntity, CateTypeAdmin)
 admin.site.register(FruitEntity, FruitAdmin)
 admin.site.register(StoreEntity, StoreAdmin)
+admin.site.register(RealProfile, RealProfileAdmin)
 

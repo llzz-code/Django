@@ -65,3 +65,13 @@ llz200515
 # FruitImage 水果图片(fruit_id, url, width, height, name)
 # CateType 水果分类(name, order_num)
 ```
+
+```python
+FruitEntity.objects.raw('select name, price from t_fruit where price<10')
+
+
+主表中获取从表的数据
+login_url = UserEntity.objects.get(pk=1)
+# 以隐性方式，读取从表的数据：对象.关联模型类全小写名称.属性
+login_url.realprofile.number
+```
