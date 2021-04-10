@@ -165,7 +165,7 @@ class FruitEntity(models.Model):
                                      null=True)
 
     def __str__(self):
-        return self.name + "-" + str(self.price)
+        return self.name
 
     class Meta:
         db_table = 't_fruit'
