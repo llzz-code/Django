@@ -1,7 +1,15 @@
 import uuid
 
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
+
+class UserManager(models.Manager):
+    def update(self, **kwargs):
+        password = kwargs.get('password', None)
+        if password and len(password) < 50:
+            kwargs['password'] = make_password(password)
+        super().update(**kwargs)
 
 # Create your models here.
 # 客户
@@ -14,6 +22,16 @@ class UserEntity(models.Model):
                              verbose_name='手机号',
                              blank=True,  # 站点表单可以为空
                              null=True)  # 数据库字段可以为空
+    password = models.CharField(max_length=100,
+                                verbose_name='密码',
+                                blank=True,
+                                null=True)
+    objects = UserManager()
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if len(self.password) < 50:
+            self.password = make_password(self.password)
+        super().save()
 
     def __str__(self):
         return self.name
@@ -134,13 +152,16 @@ class StoreEntity(models.Model):
         unique_together = (('name', 'city'),)
         ordering = ('create_time',)
 
+
 class FruitEntity(models.Model):
     name = models.CharField(max_length=20,
                             verbose_name='水果名')
 
     price = models.FloatField(verbose_name='价格')
     category = models.ForeignKey(CateTypeEntity,
+                                 related_name='fruits',
                                  on_delete=models.CASCADE,
+                                 to_field='id',
                                  verbose_name='所属类别')
     store_name = models.ForeignKey(StoreEntity,
                                    on_delete=models.CASCADE,
@@ -164,6 +185,21 @@ class FruitEntity(models.Model):
     img_height = models.IntegerField(verbose_name='水果图片高',
                                      null=True)
 
+    # 收藏表(集合)。第三张表，多对多关系，不需要实例,默认情况下，反向引用的名称是当前类的小写名称
+    users = models.ManyToManyField(UserEntity,
+                                   db_table='t_collect',
+                                   related_name='fruits',
+                                   verbose_name='收藏用户列表',
+                                   blank=True,
+                                   null=True)
+
+    tags = models.ManyToManyField('TagEntity',
+                                  db_table='t_fruit_tags',
+                                  related_name='fruits',
+                                  verbose_name='标签',
+                                  blank=True,
+                                  null=True)
+
     def __str__(self):
         return self.name
 
@@ -174,4 +210,17 @@ class FruitEntity(models.Model):
         ordering = ('id',)
 
 
+class TagEntity(models.Model):
+    name = models.CharField(max_length=50,
+                            unique=True,
+                            verbose_name='标签名')
+    order_num = models.IntegerField(verbose_name='排序',
+                                    default=1)
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 't_tag'
+        verbose_name = verbose_name_plural = '标签表'
+        ordering = ('-order_num',)
 

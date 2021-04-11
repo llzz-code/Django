@@ -87,9 +87,15 @@ class FruitCartEntity(models.Model):
                               verbose_name='水果名')
     cnt = models.IntegerField(verbose_name='数量',
                               default=1)
+
     @property
     def price(self):
         return round(self.cnt*self.fruit.price, 2)
+    # price.short_description = _('PRICE')
+    @property
+    def price1(self):
+        return self.fruit.price
+
     def __str__(self):
         return self.fruit.name + ':' + self.cart.no
 

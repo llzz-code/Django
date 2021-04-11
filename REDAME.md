@@ -75,3 +75,24 @@ login_url = UserEntity.objects.get(pk=1)
 # 以隐性方式，读取从表的数据：对象.关联模型类全小写名称.属性
 login_url.realprofile.number
 ```
+```python
+# 查看水果被哪些用户收藏
+fruit = FruitEntity.objects.get(pk=1)
+fruit.users.all()
+# 同款推荐
+cate1 = CateTypeEntity.objects.get(pk=1)
+cate1.fruits.values()
+```
+
+#### 模板加载对象
+* 1、加载
+```python
+template = loader.get_template('index.html')
+```
+
+* 渲染
+```python
+html = template.render(context)    # context是一个dict类型对象
+```
+
+![]()![2SJFEE55JQ0ZA7IUMRW@}%C](D:\python\hiDjango\helloDjango\static\images\2SJFEE55JQ0ZA7IUMRW@}%C.png)

@@ -24,23 +24,14 @@ from mainapp.fruit.views import fruit_list
 
 
 def index(request: HttpRequest):
+    return render(request, 'index.html', locals())
 
-    # 加载数据模型
-    users = [
-        {'id': 1, 'name': 'lz'},
-        {'id': 2, 'name': 'zhangsan' }
-    ]
-
-    # return HttpResponse('<h1>hi,django</h1>'.encode('utf-8'))
-    # 将数据渲染到模板中，并将渲染之后html响应给客户端
-    return render(request, 'index.html', {'users': users,
-                                          'msg': '所有用户'})
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index', index),
     # include()导入app模块下urls中声明的所有子路由
     path('user/', include('mainapp.user.urls')),
     path('fruit/', include('mainapp.fruit.urls')),
+    path('order/', include('orderapp.urls', namespace='order')),
     path('', fruit_list)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# path('fruit/', include('mainapp.fruit.urls')),

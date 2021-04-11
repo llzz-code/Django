@@ -3,13 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>主页</title>
+    {% include 'base_css.html' %}
+    <style>
+        .even{
+            background-color: lightgoldenrodyellow;
+        }
+    </style>
 </head>
 <body>
 <h3>{{ msg }}</h3>
-<ul>
+<table class="table table-bordered table-hover">
+    <thead>
+        <th>ID</th>
+        <th>账号</th>
+        <th>真实姓名</th>
+        <th>手机号</th>
+    </thead>
+    <tbody>
     {% for user in users %}
-       <li>{{ user.id }} {{ user.name }}</li>
+        {# {% cycle %}循环选择后面的字符串#}
+        {% comment %}
+        多行注释
+        &    &amp
+        '    &#39
+        {% endcomment %}
+{#        <tr class="{% cycle "even" "" %}">#}
+        <tr {% ifequal forloop.counter|divisibleby:2 0 %}class="even"{% endifequal %}>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.realprofile.real_name|default:"未实名认证" }}</td>
+            <td>{{ user.phone|default:"暂无数据" }}</td>
+        </tr>
     {% endfor %}
-</ul>
+    </tbody>
+</table>
+<pre>
+    {{ now|date:"Y-m-d H:i:s l" }}
+</pre>
+<p>
+    {{ file_path|ellipse }}文件大小{{ file_stat.st_size|filesizeformat }}
+    价格：{{ price|floatformat:2 }}
+</p>
+{% include 'base_js.html' %}
 </body>
 </html>
