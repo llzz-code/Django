@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-$*&ed1h9o$xxi@-s!)m)3vs7+t42+iyr!qmmdc$l#tb@r=cam'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']   # 当前WEB服务绑定的ip是任意的
 
@@ -121,10 +121,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+# STATIC_URL = '/static/'
+# # STATIC_ROOT = 'static'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')    # 将debug改成False后，静态文件目录
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),  #实际名 ,即实际文件夹的名字(项目根目录下的static文件夹下放置静态文件)
+)
 # 模型类中使用上传文件字段,文件的访问路径你相对于MEDIA
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
